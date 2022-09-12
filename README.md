@@ -14,7 +14,7 @@ Requirements
 
 We support:
 
-* macOS Monterey (12.3) on Apple Silicon and Intel
+* macOS on Apple Silicon and Intel
 
 Older versions may work but aren't regularly tested.
 Bug reports for older versions are welcome.
