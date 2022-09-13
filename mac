@@ -108,6 +108,8 @@ brew bundle --file=- <<EOF
 tap "thoughtbot/formulae"
 tap "homebrew/services"
 tap "heroku/brew"
+tap "universal-ctags/universal-ctags"
+tap "homebrew/cask"
 
 # Unix
 brew "universal-ctags/universal-ctags/universal-ctags", args: ["HEAD"]
