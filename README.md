@@ -1,7 +1,9 @@
+[![Build Status](https://api.cirrus-ci.com/github/thoughtbot/laptop.svg)](https://cirrus-ci.com/github/thoughtbot/laptop)
+
 Laptop
 ======
 
-Laptop is a script to set up an macOS laptop for web and mobile development.
+Laptop is a script to set up a macOS laptop for web and mobile development.
 
 It can be run multiple times on the same machine safely.
 It installs, upgrades, or skips packages
@@ -12,11 +14,7 @@ Requirements
 
 We support:
 
-* macOS Mavericks (10.9)
-* macOS Yosemite (10.10)
-* macOS El Capitan (10.11)
-* macOS Sierra (10.12)
-* macOS Monterey (10.13)
+* mmacOS Monterey (10.13) on Apple Silicon and Intel
 
 Older versions may work but aren't regularly tested.
 Bug reports for older versions are welcome.
@@ -72,7 +70,7 @@ macOS tools:
 
 Unix tools:
 
-* [Exuberant Ctags] for indexing files for vim tab completion
+* [Universal Ctags] for indexing files for vim tab completion
 * [Git] for version control
 * [OpenSSL] for Transport Layer Security (TLS)
 * [RCM] for managing company and personal dotfiles
@@ -81,7 +79,7 @@ Unix tools:
 * [Watchman] for watching for filesystem events
 * [Zsh] as your shell
 
-[Exuberant Ctags]: http://ctags.sourceforge.net/
+[Universal Ctags]: https://ctags.io/
 [Git]: https://git-scm.com/
 [OpenSSL]: https://www.openssl.org/
 [RCM]: https://github.com/thoughtbot/rcm
@@ -99,34 +97,27 @@ Heroku tools:
 
 GitHub tools:
 
-* [Hub] for interacting with the GitHub API
+* [GitHub CLI] for interacting with the GitHub API
 
-[Hub]: http://hub.github.com/
+[GitHub CLI]: https://cli.github.com/
 
 Image tools:
 
 * [ImageMagick] for cropping and resizing images
 
-Testing tools:
-
-* [Qt 5] for headless JavaScript testing via [Capybara Webkit]
-
-[Qt 5]: http://qt-project.org/
-[Capybara Webkit]: https://github.com/thoughtbot/capybara-webkit
-
 Programming languages, package managers, and configuration:
 
-* [ASDF] for managing programming language versions
+* [asdf-vm] for managing programming language versions
 * [Bundler] for managing Ruby libraries
-* [Node.js] and [NPM], for running apps and installing JavaScript packages
+* [Node.js] and [npm], for running apps and installing JavaScript packages
 * [Ruby] stable for writing general-purpose code
 * [Yarn] for managing JavaScript packages
 
 [Bundler]: http://bundler.io/
 [ImageMagick]: http://www.imagemagick.org/
 [Node.js]: http://nodejs.org/
-[NPM]: https://www.npmjs.org/
-[ASDF]: https://github.com/asdf-vm/asdf
+[npm]: https://www.npmjs.org/
+[asdf-vm]: https://github.com/asdf-vm/asdf
 [Ruby]: https://www.ruby-lang.org/en/
 [Yarn]: https://yarnpkg.com/en/
 
@@ -196,17 +187,6 @@ for more customization examples.
 Contributing
 ------------
 
-Edit the `mac` file.
-Document in the `README.md` file.
-Follow shell style guidelines by using [ShellCheck] and [Syntastic].
-
-```sh
-brew install shellcheck
-```
-
-[ShellCheck]: http://www.shellcheck.net/about.html
-[Syntastic]: https://github.com/scrooloose/syntastic
-
 Thank you, [contributors]!
 
 [contributors]: https://github.com/thoughtbot/laptop/graphs/contributors
@@ -216,10 +196,33 @@ you agree to abide by the thoughtbot [code of conduct].
 
 [code of conduct]: https://thoughtbot.com/open-source-code-of-conduct
 
+Edit the `mac` file.
+Document in the `README.md` file.
+Update the `CHANGELOG`.
+Follow shell style guidelines by using [ShellCheck] and [Syntastic].
+
+```sh
+brew install shellcheck
+```
+
+[ShellCheck]: http://www.shellcheck.net/about.html
+[Syntastic]: https://github.com/scrooloose/syntastic
+
+### Testing your changes
+
+Test your changes by running the script on a fresh install of macOS.
+You can use the free and open source emulator [UTM].
+
+Tip: Make a fresh virtual machine with the installation of macOS completed and
+your user created and first launch complete. Then duplicate that machine to test
+the script each time on a fresh install thats ready to go.
+
+[UTM]: https://mac.getutm.app
+
 License
 -------
 
-Laptop is © 2011-2017 thoughtbot, inc.
+Laptop is © 2011-2022 thoughtbot, inc.
 It is free software,
 and may be redistributed under the terms specified in the [LICENSE] file.
 
@@ -228,7 +231,7 @@ and may be redistributed under the terms specified in the [LICENSE] file.
 About thoughtbot
 ----------------
 
-![thoughtbot](http://presskit.thoughtbot.com/images/thoughtbot-logo-for-readmes.svg)
+![thoughtbot](https://thoughtbot.com/brand_assets/93:44.svg)
 
 Laptop is maintained and funded by thoughtbot, inc.
 The names and logos for thoughtbot are trademarks of thoughtbot, inc.
