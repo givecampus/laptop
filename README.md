@@ -219,6 +219,12 @@ the script each time on a fresh install thats ready to go.
 
 [UTM]: https://mac.getutm.app
 
+Spinning up a VM can take a while, though, so a quicker way to test changes is to uninstall Homebrew completely and rerun this script:
+```sh
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"; sudo rm -rf /opt/homebrew/; sudo rm -rf ~/.asdf;
+sh mac 2>&1 | tee ~/laptop.log
+```
+
 License
 -------
 
