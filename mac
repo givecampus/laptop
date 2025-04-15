@@ -13,15 +13,19 @@ fancy_echo() {
   printf "\\n$fmt\\n" "$@"
 }
 
+zshrc() {
+  if [ -w "$HOME/.zshrc.local" ]; then
+    echo "$HOME/.zshrc.local"
+  else
+    echo "$HOME/.zshrc"
+  fi
+}
+
 append_to_zshrc() {
   local text="$1" zshrc
   local skip_new_line="${2:-0}"
 
-  if [ -w "$HOME/.zshrc.local" ]; then
-    zshrc="$HOME/.zshrc.local"
-  else
-    zshrc="$HOME/.zshrc"
-  fi
+  zshrc=$(zshrc)
 
   if ! grep -Fqs "$text" "$zshrc"; then
     if [ "$skip_new_line" -eq 1 ]; then
@@ -105,7 +109,6 @@ fi
 fancy_echo "Updating Homebrew formulae ..."
 brew update --force # https://github.com/Homebrew/brew/issues/1151
 brew bundle --file=- <<EOF
-tap "homebrew/services"
 tap "heroku/brew"
 
 # Unix
@@ -120,6 +123,17 @@ brew "vim"
 brew "watchman"
 brew "zsh"
 
+# For ruby-build dependencies (used by asdf)
+brew "openssl@3"
+brew "readline"
+brew "libyaml"
+brew "gmp"
+brew "autoconf"
+
+# For nodejs dependencies (used by asdf)
+brew "gpg"
+brew "gawk"
+
 # Heroku
 brew "heroku/brew/heroku"
 
@@ -133,15 +147,17 @@ brew "imagemagick"
 brew "poppler"
 
 # Programming language prerequisites and package managers
-brew "libyaml" # should come after openssl
 brew "coreutils"
 brew "yarn"
 cask "gpg-suite-no-mail"
 
 # Databases
+brew libpq
 brew "postgresql@16", restart_service: :changed
 brew "redis", restart_service: :changed
 EOF
+
+append_to_zshrc 'export PATH="/opt/homebrew/opt/libpq/bin:$PATH"'
 
 fancy_echo "Update heroku binary ..."
 brew unlink heroku
@@ -150,39 +166,48 @@ brew link --force heroku
 fancy_echo "Configuring asdf version manager ..."
 if [ ! -d "$HOME/.asdf" ]; then
   brew install asdf
-  append_to_zshrc "source $(brew --prefix asdf)/libexec/asdf.sh" 1
+  append_to_zshrc 'export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"' 1
 fi
+
+# Source latest zsh profile
+fancy_echo "Sourcing latest zsh profile ..."
+source "$(zshrc)"
 
 alias install_asdf_plugin=add_or_update_asdf_plugin
 add_or_update_asdf_plugin() {
   local name="$1"
   local url="$2"
 
-  if ! asdf plugin-list | grep -Fq "$name"; then
-    asdf plugin-add "$name" "$url"
+  if ! asdf plugin list | grep -Fq "$name"; then
+    asdf plugin add "$name" "$url"
   else
-    asdf plugin-update "$name"
+    asdf plugin update "$name"
   fi
 }
 
 # shellcheck disable=SC1091
-. "$(brew --prefix asdf)/libexec/asdf.sh"
 add_or_update_asdf_plugin "ruby" "https://github.com/asdf-vm/asdf-ruby.git"
 add_or_update_asdf_plugin "nodejs" "https://github.com/asdf-vm/asdf-nodejs.git"
 
 install_asdf_language() {
   local language="$1"
-  local version
-  version="$(asdf list-all "$language" | grep -v "[a-z]" | tail -1)"
+  local version="$2"
+
+  fancy_echo "Installing $1 version $2 ..."
 
   if ! asdf list "$language" | grep -Fq "$version"; then
-    asdf install "$language" "$version"
-    asdf global "$language" "$version"
+    if [ "$language" = "ruby" ]; then
+      RUBY_CFLAGS="-w" asdf install "$language" "$version"
+    else
+      asdf install "$language" "$version"
+    fi
+
+    asdf set -u "$language" "$version"
+    asdf reshim "$language"
   fi
 }
 
-fancy_echo "Installing latest Ruby ..."
-install_asdf_language "ruby"
+install_asdf_language "ruby" "3.2.5"
 gem update --system
 number_of_cores=$(sysctl -n hw.ncpu)
 bundle config --global jobs $((number_of_cores - 1))
@@ -190,11 +215,12 @@ bundle config --global jobs $((number_of_cores - 1))
 fancy_echo "Installing ruby packages ..."
 gem install parity
 
-fancy_echo "Installing latest Node ..."
-install_asdf_language "nodejs"
+install_asdf_language "nodejs" "20.9.0"
 
 if [ -f "$HOME/.laptop.local" ]; then
   fancy_echo "Running your customizations from ~/.laptop.local ..."
   # shellcheck disable=SC1091
   . "$HOME/.laptop.local"
 fi
+
+fancy_echo "Finished running this installation script!"
