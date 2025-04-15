@@ -152,7 +152,7 @@ brew "yarn"
 cask "gpg-suite-no-mail"
 
 # Databases
-brew libpq
+brew "libpq"
 brew "postgresql@16", restart_service: :changed
 brew "redis", restart_service: :changed
 EOF
@@ -166,8 +166,9 @@ brew link --force heroku
 fancy_echo "Configuring asdf version manager ..."
 if [ ! -d "$HOME/.asdf" ]; then
   brew install asdf
-  append_to_zshrc 'export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"' 1
 fi
+
+append_to_zshrc 'export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"' 1
 
 # Source latest zsh profile
 fancy_echo "Sourcing latest zsh profile ..."
