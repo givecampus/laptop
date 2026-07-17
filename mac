@@ -140,6 +140,11 @@ brew "heroku/brew/heroku"
 # GitHub
 brew "gh"
 
+# AWS / EKS access (see givecampus aws-infrastructure/README_AWSACCESS.md)
+brew "awscli"
+brew "kubectl"
+cask "session-manager-plugin"
+
 # Image manipulation
 brew "imagemagick"
 
