@@ -109,8 +109,6 @@ fi
 fancy_echo "Updating Homebrew formulae ..."
 brew update --force # https://github.com/Homebrew/brew/issues/1151
 brew bundle --file=- <<EOF
-tap "heroku/brew"
-
 # Unix
 brew "universal-ctags"
 brew "git"
@@ -133,9 +131,6 @@ brew "autoconf"
 # For nodejs dependencies (used by asdf)
 brew "gpg"
 brew "gawk"
-
-# Heroku
-brew "heroku/brew/heroku"
 
 # GitHub
 brew "gh"
@@ -163,10 +158,6 @@ brew "redis", restart_service: :changed
 EOF
 
 append_to_zshrc 'export PATH="/opt/homebrew/opt/libpq/bin:$PATH"'
-
-fancy_echo "Update heroku binary ..."
-brew unlink heroku
-brew link --force heroku
 
 fancy_echo "Configuring asdf version manager ..."
 if [ ! -d "$HOME/.asdf" ]; then
